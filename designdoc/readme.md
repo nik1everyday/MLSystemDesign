@@ -1,4 +1,3 @@
-# ML System Design Doc - [RU]
 ## Дизайн MVP <MLSystemDesign> № 1
     
 > ## Термины и пояснения
