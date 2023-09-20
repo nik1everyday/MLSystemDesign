@@ -2,7 +2,7 @@
 name = "mlsystemdesign"
 version = "0.1.0"
 description = ""
-authors = ["Nikita Borisov <nik-everyday@yandex.ru>"]
+authors = ["Nikita Borisov <nik-everyday@yandex.ru>", "Evgeny Bakaev <bak.evsha@gmail.com>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
@@ -13,6 +13,7 @@ pandas = "^2.1.0"
 numpy = "^1.26.0"
 datetime = "^5.2"
 matplotlib = "^3.8.0"
+statsmodels = "^0.14.0"
 
 
 [build-system]
