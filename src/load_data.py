@@ -1,10 +1,17 @@
 import yfinance as yf
+import pandas as pd
 
-def load_oil_price_data(start: str):
+
+def load_oil_price_data(start: str) -> pd.DataFrame:
     """
-    Загрузить данные о ценах на нефть из Yahoo Finance.
+    Загружает данные о ценах на нефть из Yahoo Finance.
 
-    :return: DataFrame с данными о ценах на нефть.
+    :param start: Начальная дата в формате 'гггг-мм-дд' для загрузки данных.
+    :type start: str
+
+    :return: DataFrame с данными о ценах на нефть,
+             включая столбцы 'Open', 'High', 'Low', 'Close', 'Volume', и 'Dividends'.
+    :rtype: pd.DataFrame
     """
     try:
         oil_etf = yf.Ticker("USO")
@@ -13,4 +20,4 @@ def load_oil_price_data(start: str):
         return oil_price_data
     except Exception as e:
         print(f"Произошла ошибка при загрузке данных: {str(e)}")
-        return None
+        return pd.DataFrame()
