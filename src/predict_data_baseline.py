@@ -16,14 +16,14 @@ model_exp_smoothing = SimpleExpSmoothing(train_data, initialization_method="heur
 )
 
 
-def predict_exp_smoothing_next_day():
+def predict_exp_smoothing_next_day(model):
     """
     Возвращает прогноз цены закрытия на следующий день
 
     :return: float цена на следующий день
     """
     try:
-        return model_exp_smoothing.forecast(1).values[0]
+        return model.forecast(1).values[0]
     except Exception as ex:
         print(f'Произошла ошибка \n{ex}')
         return np.nan
