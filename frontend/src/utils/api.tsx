@@ -12,8 +12,8 @@ class Api {
     return Promise.reject(`Ошибка: ${res.status}`);
   }
 
-  getPredictions() {
-    return fetch(this._url + '/predict')
+  getPredictions(startDate: string, numNextDays: number) {
+    return fetch(this._url + '/predict/' + startDate + '/' + numNextDays)
       .then(this._checkResponse)
   }
 

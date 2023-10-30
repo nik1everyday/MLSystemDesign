@@ -5,9 +5,13 @@ import './App.scss';
 import React from 'react';
 
 function App() {
+    function getPredictions(startDate: string, numNextDays: number) {
+        return api.getPredictions(startDate, numNextDays)
+    }
+
     return (
         <div className="page">
-            <Main />
+            <Main getPredictions={getPredictions} />
         </div>
     )
 }
