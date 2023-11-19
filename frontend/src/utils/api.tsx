@@ -2,7 +2,7 @@ class Api {
   private _url: string
   private _headers: any;
   constructor() {
-    this._url = 'http://localhost:8005'
+    this._url = 'http://localhost:8000'
     // this._headers = config.headers
   }
   _checkResponse(res: any) {
@@ -13,7 +13,10 @@ class Api {
   }
 
   getPredictions(startDate: string, numNextDays: number) {
-    return fetch(this._url + '/predict/' + startDate + '/' + numNextDays)
+    return fetch(this._url + '/historical-and-predictive-data', {
+      method: 'POST',
+      body: JSON.stringify({ 'start_date': startDate, 'forecast_days': numNextDays })
+    })
       .then(this._checkResponse)
   }
 
