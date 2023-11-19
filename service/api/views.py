@@ -1,37 +1,56 @@
 from fastapi import APIRouter, HTTPException
 from datetime import datetime, timedelta
-from statsmodels.tsa.api import SimpleExpSmoothing
+from typing import List, Optional
+from pydantic import BaseModel
 
+# Предполагаем, что функции load_oil_price_data и predict_data уже определены
+from src.predict_data_baseline import predict_data
 from src.load_data import load_oil_price_data
-from src.predict_data_baseline import predict_exp_smoothing_next_day
 
 router = APIRouter()
 
 
-@router.get("/oil_price/")
-def get_oil_price(start_date: str, days: int):
+class HistoricalAndPredictiveRequest(BaseModel):
+    start_date: str  # Дата начала для исторических данных
+    forecast_days: int  # Количество дней для прогноза
+
+
+class CombinedResponse(BaseModel):
+    date: str
+    historical_value: Optional[float]
+    predicted_value: Optional[float]
+
+
+@router.post("/historical_and_predictive_data", response_model=List[CombinedResponse])
+async def get_historical_and_predictive_data(request: HistoricalAndPredictiveRequest):
     try:
-        oil_data = load_oil_price_data(start_date)
-        historical_data = {
-            "dates": list(oil_data.index.strftime('%Y-%m-%d')),
-            "values": list(oil_data['Close'].values)
-        }
+        # Проверка даты
+        start_date_datetime = datetime.strptime(request.start_date, "%Y-%m-%d")
+        # Загрузка исторических данных
+        six_months_ago = start_date_datetime - timedelta(days=180)
+        historical_data = load_oil_price_data(six_months_ago.strftime("%Y-%m-%d"))
+        # Генерация прогноза на указанное количество дней вперед от указанной даты
+        forecast_data = predict_data(request.start_date, request.forecast_days)
 
-        smoothing_level = 0.9999999850987182
-        model_exp_smoothing = SimpleExpSmoothing(oil_data['Close'].values, initialization_method="heuristic").fit(
-            smoothing_level=smoothing_level, optimized=False
-        )
+        # Комбинирование исторических и предсказанных данных
+        combined_data = []
+        for index, row in historical_data.iterrows():
+            combined_data.append({
+                "date": index.strftime("%Y-%m-%d"),
+                "historical_value": row.Close,
+                "predicted_value": None
+            })
 
-        predicted_values = [predict_exp_smoothing_next_day(model_exp_smoothing) for _ in range(days)]
-        predicted_dates = [(datetime.strptime(start_date, "%Y-%m-%d") + timedelta(days=i + 1)).strftime('%Y-%m-%d') for
-                           i in range(days)]
+        for index, row in forecast_data.iterrows():
+            combined_data.append({
+                "date": row.Date.strftime("%Y-%m-%d"),
+                "predicted_value": row.Predicted_Close,
+                "historical_value": None
+            })
 
-        forecast_data = {
-            "dates": predicted_dates,
-            "values": predicted_values
-        }
+        return combined_data
 
-        return {"historical_data": historical_data, "forecast_data": forecast_data}
-
+    except ValueError as ve:
+        raise HTTPException(status_code=400, detail=f"Invalid start date format: {ve}")
     except Exception as e:
-        raise HTTPException(status_code=400, detail=str(e))
+        raise HTTPException(status_code=500, detail=f"Error in processing data: {str(e)}")
