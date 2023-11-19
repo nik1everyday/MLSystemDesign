@@ -1,5 +1,5 @@
 from fastapi import APIRouter, HTTPException
-from datetime import datetime, timedelta
+from datetime import datetime
 from typing import List, Optional
 from pydantic import BaseModel
 
@@ -24,15 +24,12 @@ class CombinedResponse(BaseModel):
 @router.post("/historical_and_predictive_data", response_model=List[CombinedResponse])
 async def get_historical_and_predictive_data(request: HistoricalAndPredictiveRequest):
     try:
-        # Проверка даты
-        start_date_datetime = datetime.strptime(request.start_date, "%Y-%m-%d")
-        # Загрузка исторических данных
-        six_months_ago = start_date_datetime - timedelta(days=180)
-        historical_data = load_oil_price_data(six_months_ago.strftime("%Y-%m-%d"))
-        # Генерация прогноза на указанное количество дней вперед от указанной даты
-        forecast_data = predict_data(request.start_date, request.forecast_days)
+        start_date_str = datetime.strptime(request.start_date, "%Y-%m-%d").strftime("%Y-%m-%d")
+        historical_data = load_oil_price_data(start_date_str)
 
-        # Комбинирование исторических и предсказанных данных
+        current_date_str = datetime.now().strftime("%Y-%m-%d")
+        forecast_data = predict_data(current_date_str, request.forecast_days)
+
         combined_data = []
         for index, row in historical_data.iterrows():
             combined_data.append({
