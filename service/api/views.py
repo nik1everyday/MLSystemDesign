@@ -21,7 +21,7 @@ class CombinedResponse(BaseModel):
     predicted_value: Optional[float]
 
 
-@router.post("/historical_and_predictive_data", response_model=List[CombinedResponse])
+@router.post("/historical-and-predictive-data", response_model=List[CombinedResponse])
 async def get_historical_and_predictive_data(request: HistoricalAndPredictiveRequest):
     try:
         start_date_str = datetime.strptime(request.start_date, "%Y-%m-%d").strftime("%Y-%m-%d")
