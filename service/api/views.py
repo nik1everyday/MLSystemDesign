@@ -1,4 +1,5 @@
 from fastapi import APIRouter, HTTPException
+from starlette.responses import FileResponse
 from datetime import datetime
 from typing import List, Optional
 from pydantic import BaseModel
@@ -51,3 +52,13 @@ async def get_historical_and_predictive_data(request: HistoricalAndPredictiveReq
         raise HTTPException(status_code=400, detail=f"Invalid start date format: {ve}")
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error in processing data: {str(e)}")
+
+
+@router.get('/')
+async def get_frontend():
+    """Получить фронт
+
+    Returns:
+        HTML: HTML-страница
+    """
+    return FileResponse("service/static/index.html")
