@@ -18,6 +18,10 @@ export default function Main(methods: any) {
     setIsSubmitForm(true)
   }
 
+  function goBack() {
+    setIsSubmitForm(false)
+  }
+
   useEffect(() => {
     setDate(new Date(Date.now() - 30 * 24 * 60 * 60 * 1000))
   }, [])
@@ -39,7 +43,10 @@ export default function Main(methods: any) {
           <Button label="Получить прогноз" type="submit" icon="pi pi-check" />
         </form>)}
       {isSubmitForm && (
-        <Diagram></Diagram>)}
+        <>
+          <Diagram></Diagram>
+          <Button label="Назад" type='button' onClick={goBack} />
+        </>)}
     </main>
   )
 }
