@@ -55,14 +55,14 @@ export default function Main(methods: any) {
               data: hystoricalData,
               fill: false,
               borderColor: documentStyle.getPropertyValue('--blue-500'),
-              tension: 0.4
+              tension: 0
             },
             {
               label: 'Прогнозируемые цены',
               data: predictedData,
               fill: false,
               borderColor: documentStyle.getPropertyValue('--pink-500'),
-              tension: 0.4
+              tension: 0
             }
           ]
         };
