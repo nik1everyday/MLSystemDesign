@@ -15,7 +15,65 @@ export default function Main(methods: any) {
 
   function handleSubmit(evt: any) {
     evt.preventDefault()
-    setIsSubmitForm(true)
+
+    const year = date.getFullYear();
+    const month = ('0' + (date.getMonth() + 1)).slice(-2);
+    const day = ('0' + date.getDate()).slice(-2);
+
+    const formattedDate = year + '-' + month + '-' + day;
+
+    methods.getPredictions(formattedDate, numDays)
+      .then((res: any) => {
+        setIsSubmitForm(true)
+
+        const hystoricalData: any[] = []
+        const predictedData: any[] = []
+        const dates: any[] = []
+
+        res.forEach((item: any) => {
+          if (item) {
+            if (item['historical_value']) {
+              hystoricalData.push(item['historical_value'])
+              dates.push(item['date'])
+            }
+            else if (item['predicted_value']) {
+              predictedData.push(item['predicted_value'])
+              dates.push(item['date'])
+            }
+          }
+        })
+
+        predictedData.unshift(hystoricalData[hystoricalData.length - 1])
+        predictedData.unshift(...Array(hystoricalData.length - 1).fill(null))
+
+        const documentStyle = getComputedStyle(document.documentElement);
+        const data = {
+          labels: dates,
+          datasets: [
+            {
+              label: 'Исторические цены',
+              data: hystoricalData,
+              fill: false,
+              borderColor: documentStyle.getPropertyValue('--blue-500'),
+              tension: 0.4
+            },
+            {
+              label: 'Прогнозируемые цены',
+              data: predictedData,
+              fill: false,
+              borderColor: documentStyle.getPropertyValue('--pink-500'),
+              tension: 0.4
+            }
+          ]
+        };
+
+        console.log(data)
+
+        methods.setCharData(data)
+      })
+      .catch((err: any) => {
+        console.log(err)
+      })
   }
 
   function goBack() {
@@ -32,12 +90,12 @@ export default function Main(methods: any) {
       {!isSubmitForm && (
         <form onSubmit={handleSubmit}>
           <div className="flex-auto">
-            <label htmlFor="mile" className="font-bold block mb-2">Какое количество дней вперед?</label>
+            <label htmlFor="mile" className="font-bold block mb-2 flex-auto__num-days">Какое количество дней вперед?</label>
             <InputNumber inputId="mile" value={numDays} onValueChange={(e) => setNumDays(e.value)} suffix=" дней"
               showButtons min={1} max={30} />
           </div>
           <div className="flex-auto">
-            <label htmlFor="mile" className="font-bold block mb-2">С какой даты получить исторические цены?</label>
+            <label htmlFor="mile" className="font-bold block mb-2 flex-auto__date">С какой даты получить исторические цены?</label>
             <Calendar value={date} onChange={(e) => setDate(e.value)} dateFormat="yy-mm-dd" showIcon />
           </div>
           <Button label="Получить прогноз" type="submit" icon="pi pi-check" />

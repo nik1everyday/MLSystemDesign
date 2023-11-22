@@ -15,7 +15,8 @@ class Api {
   getPredictions(startDate: string, numNextDays: number) {
     return fetch(this._url + '/historical-and-predictive-data', {
       method: 'POST',
-      body: JSON.stringify({ 'start_date': startDate, 'forecast_days': numNextDays })
+      body: JSON.stringify({ "start_date": startDate, "forecast_days": numNextDays }),
+      headers: { 'Content-type': 'application/json' }
     })
       .then(this._checkResponse)
   }
