@@ -4,7 +4,6 @@ from datetime import datetime
 from typing import List, Optional
 from pydantic import BaseModel
 
-# Предполагаем, что функции load_oil_price_data и predict_data уже определены
 from src.predict_data_baseline import predict_data
 from src.load_data import load_oil_price_data
 
@@ -12,8 +11,8 @@ router = APIRouter()
 
 
 class HistoricalAndPredictiveRequest(BaseModel):
-    start_date: str  # Дата начала для исторических данных
-    forecast_days: int  # Количество дней для прогноза
+    start_date: str
+    forecast_days: int
 
 
 class CombinedResponse(BaseModel):
