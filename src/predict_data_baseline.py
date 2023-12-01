@@ -9,7 +9,6 @@ from src.load_data import load_oil_price_data
 
 def train_model():
 
-    current_date_str = datetime.now().strftime("%Y-%m-%d")
     current_date = datetime.strptime(current_date_str, "%Y-%m-%d")
 
     three_months_earlier = current_date - relativedelta(months=3)
