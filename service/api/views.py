@@ -4,7 +4,7 @@ from datetime import datetime
 from typing import List, Optional
 from pydantic import BaseModel
 
-from src.predict_data_baseline import predict_data
+from src.predict_data_baseline import train_model, predict_data
 from src.load_data import load_oil_price_data
 
 router = APIRouter()
@@ -21,14 +21,16 @@ class CombinedResponse(BaseModel):
     predicted_value: Optional[float]
 
 
+model = train_model()
+
+
 @router.post("/historical-and-predictive-data", response_model=List[CombinedResponse])
 async def get_historical_and_predictive_data(request: HistoricalAndPredictiveRequest):
     try:
         start_date_str = datetime.strptime(request.start_date, "%Y-%m-%d").strftime("%Y-%m-%d")
         historical_data = load_oil_price_data(start_date_str)
 
-        current_date_str = datetime.now().strftime("%Y-%m-%d")
-        forecast_data = predict_data(current_date_str, request.forecast_days)
+        forecast_data = predict_data(request.forecast_days, model)
 
         combined_data = []
         for index, row in historical_data.iterrows():
