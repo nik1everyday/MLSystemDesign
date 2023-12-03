@@ -9,12 +9,12 @@ from src.load_data import load_oil_price_data
 
 def train_model():
 
-    current_date = datetime.strptime(current_date_str, "%Y-%m-%d")
+    current_date = datetime.now()
 
-    three_months_earlier = current_date - relativedelta(months=3)
-    three_months_earlier_str = three_months_earlier.strftime("%Y-%m-%d")
+    three_months_earlier = current_date - relativedelta(year=1)
+    year_earlier_str = three_months_earlier.strftime("%Y-%m-%d")
 
-    oil_data = load_oil_price_data(three_months_earlier_str)
+    oil_data = load_oil_price_data(year_earlier_str)
 
     train_data = pd.DataFrame(data=oil_data['Close'], index=oil_data.index)
     train_data.reset_index(inplace=True)
