@@ -2,7 +2,8 @@ class Api {
   private _url: string
   private _headers: any;
   constructor() {
-    this._url = 'http://localhost:8000'
+    this._url = ''
+    // this._url = 'http://localhost:8000'
     // this._headers = config.headers
   }
   _checkResponse(res: any) {
