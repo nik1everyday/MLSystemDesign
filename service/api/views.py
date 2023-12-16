@@ -4,7 +4,7 @@ from datetime import datetime
 from typing import List, Optional
 from pydantic import BaseModel
 
-from src.predict_data_baseline import train_model, predict_data
+from src.predict_data import train_model, predict_data
 from src.load_data import load_oil_price_data
 
 router = APIRouter()
