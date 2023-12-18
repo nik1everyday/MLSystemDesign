@@ -1,4 +1,4 @@
-# MLSystemDesign
+# StockTimeSeriesForecasting
 ### <a href="/designdoc/designdoc.md">Дизайн-документ проекта</a>
 
 ## Описание проекта
