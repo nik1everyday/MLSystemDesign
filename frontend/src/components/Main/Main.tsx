@@ -92,7 +92,7 @@ export default function Main(methods: any) {
           <div className="flex-auto">
             <label htmlFor="mile" className="font-bold block mb-2 flex-auto__num-days">Какое количество дней вперед?</label>
             <InputNumber inputId="mile" value={numDays} onValueChange={(e) => setNumDays(e.value)} suffix=" дней"
-              showButtons min={1} max={30} />
+              showButtons min={1} max={7} />
           </div>
           <div className="flex-auto">
             <label htmlFor="mile" className="font-bold block mb-2 flex-auto__date">С какой даты получить исторические цены?</label>
