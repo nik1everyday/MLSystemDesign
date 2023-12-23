@@ -12,7 +12,7 @@
 ```bash
 git clone https://github.com/nik1everyday/StockTimeSeriesForecasting.git
 pip install -r requirements.txt
-uvicorn service.api.app:app --reload
+uvicorn service.api.app:app --port 8000 --reload
 ```
 Затем перейти по ссылке http://127.0.0.1:8000/ в любом браузере.
 
