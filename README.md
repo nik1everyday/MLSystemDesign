@@ -10,10 +10,16 @@
 
 ## Как запустить проект
 ```bash
+git clone https://github.com/nik1everyday/StockTimeSeriesForecasting.git
 pip install -r requirements.txt
 uvicorn service.api.app:app --reload
 ```
 Затем перейти по ссылке http://127.0.0.1:8000/ в любом браузере.
+
+Если вы хотите, чтобы ваш сервис был доступен в интернете, запустите эту команду после запуска сервиса на локальной машине: 
+```bash
+cloudflared tunnel --url http://127.0.0.1:8000
+```
 
 ## Структура проекта
 
@@ -54,6 +60,7 @@ uvicorn service.api.app:app --reload
 
 - `.gitignore` - файл для игнорирования файлов и директорий при работе с Git
 - `pyproject.toml` - файл с конфигурацией Poetry
+- `requirements.txt` - файл с зависимостями
 - `README.md` - файл с описанием проекта и инструкциями по запуску
 
 
